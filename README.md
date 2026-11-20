@@ -26,3 +26,10 @@ Most directory size utilities either follow symlinks blindly (risking infinite l
 - **Permission errors**: Files that cannot be read are skipped; the total reflects only accessible files.
 - **Cycles**: Detected by comparing resolved paths; a symlink pointing to an already-visited directory is ignored.
 - **Non-regular files**: Only directories, regular files, and symlinks are considered; other types (sockets, devices) are ignored.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
